@@ -1,8 +1,8 @@
 # MyWifeCreeperChan
 
-this mod ain't gonna be uploaded to modrinth or nothin cuz it's gonna be raunchy
+Indecent mod that adds girlfriends with huge breasts that bounce, are passive, they can be fed to increase breast size (3 different stages), and some other interactions like milking.
 
-Mod that adds girlfriends with huge breasts that bounce, are passive, they can be fed to increase breast size (3 different stages), and some other interactions.
+no modrinth upload u get this off my website or u cry
 
 references (not mine):
 
