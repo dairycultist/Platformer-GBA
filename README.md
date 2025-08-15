@@ -1,14 +1,12 @@
 # MyWifeCreeperChan
 
-this mod ain't gonna be uploaded to modrinth or nothin cuz it's gonna be sexual af
+this mod ain't gonna be uploaded to modrinth or nothin cuz it's gonna be raunchy
 
-creeper mod that adds creepers with huge breasts, are passive, and can be milked
-
-green creeper milk
-
-and the boobs should bounce
+mod that adds girlfriends with huge breasts, are passive, and can be milked (as well as a bunch of other interactions), and the boobs should bounce
 
 references (not mine):
+
+![](boob%20mod.png)
 
 ![](https://i.redd.it/hml1ahr1701f1.jpeg)
 
