@@ -2,7 +2,7 @@
 
 this mod ain't gonna be uploaded to modrinth or nothin cuz it's gonna be raunchy
 
-mod that adds girlfriends with huge breasts, are passive, and can be milked (as well as a bunch of other interactions), and the boobs should bounce
+Mod that adds girlfriends with huge breasts that bounce, are passive, they can be fed to increase breast size (3 different stages), and some other interactions.
 
 references (not mine):
 
