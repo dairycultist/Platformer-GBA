@@ -1,15 +1,17 @@
-# MyWifeCreeperChan
+# Karting GBA
 
 [minicraft plus](https://minicraftplus.github.io/) is cool because it has its own dedicated website (with info + download), a small community, and a small piece of software that gets updates. I wanna do that
 
-Indecent mod that adds girlfriends with huge breasts that bounce, are passive, they can be fed to increase breast size (3 different stages), and some other interactions like milking.
+what if I made a 3D karting game for GBA
 
-no modrinth upload u get this off my website or u cry
+I think that would be a fun project
 
-references (not mine):
+especially because I actually like karting games, so im not JUST making it for the process but also the result
 
-![](boob%20mod.png)
+has some fun technical challenges because GBA is Not particularly built for 3D, and also just figuring out how GBA development works in general
 
-![](https://i.redd.it/hml1ahr1701f1.jpeg)
+emulator https://mgba.io/
 
-![](https://preview.redd.it/cow-pig-and-chicken-variants-waifucraft-v0-li68xbrsplxe1.png?width=1080&crop=smart&auto=webp&s=3b2ec9b2322bd4dd6059643766495388edd06783)
+example of such game https://github.com/Vulcalien/minicraft-gba
+
+https://www.reddit.com/r/GameboyAdvance/comments/1giowz0/what_3d_games_are_for_the_game_boy_advance/
