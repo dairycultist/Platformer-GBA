@@ -1,5 +1,7 @@
 # MyWifeCreeperChan
 
+[minicraft plus](https://minicraftplus.github.io/) is cool because it has its own dedicated website (with info + download), a small community, and a small piece of software that gets updates. I wanna do that
+
 Indecent mod that adds girlfriends with huge breasts that bounce, are passive, they can be fed to increase breast size (3 different stages), and some other interactions like milking.
 
 no modrinth upload u get this off my website or u cry
