@@ -14,4 +14,6 @@ emulator https://mgba.io/
 
 example of such game https://github.com/Vulcalien/minicraft-gba
 
+There are libraries like `libgba` and `libtonc` for developing for GBA, neither of which I will be using.
+
 https://www.reddit.com/r/GameboyAdvance/comments/1giowz0/what_3d_games_are_for_the_game_boy_advance/
