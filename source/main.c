@@ -28,7 +28,7 @@ static inline void draw_mode7(uint16_t *const buffer, int x, int y, uint8_t a) {
 
     // this needs some heavy optimizations and I do NOT wanna use ASM
 
-    for (int screen_y = 16; screen_y < 128; screen_y++) {
+    for (int screen_y = 24; screen_y < 88; screen_y++) {
 
         int persp_y = 8192 / screen_y;
 
@@ -40,9 +40,9 @@ static inline void draw_mode7(uint16_t *const buffer, int x, int y, uint8_t a) {
             int sample_y = persp_x * SIN(a) / 128 + persp_y * COS(a) / 128 + y;
 
             if (sample_x >= 0 && sample_y >= 0) {
-                buffer[XY(screen_x, screen_y)] = RGB15(((sample_x / 16 % 2) ^ (sample_y / 16 % 2)) * 31, 0, 0);
+                buffer[XY(screen_x, screen_y + 40)] = RGB15(sample_x % 32, sample_y % 32, 0);
             } else {
-                buffer[XY(screen_x, screen_y)] = 0;
+                buffer[XY(screen_x, screen_y + 40)] = 0;
             }
         }
     }
