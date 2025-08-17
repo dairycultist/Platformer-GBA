@@ -1,15 +1,7 @@
-# User config
-# ===========
-
 # ROM config
-# ----------
-
 NAME		:= first
 GAME_TITLE	:= "FIRST"
 GAME_CODE	:= "00"
-
-# include paths
-INCLUDES	:= # A list of paths
 
 # tools
 CC			:= arm-none-eabi-gcc
