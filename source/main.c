@@ -32,12 +32,12 @@ int main(int argc, char *argv[]) {
 
         for (int screen_y = 16; screen_y < 128; screen_y++) {
 
-            int sample_y = 2048 / screen_y;
+            int sample_y = 4096 / screen_y;
+            sample_y += tick;
 
             for (int screen_x = 0; screen_x < 160; screen_x++) {
 
-                int sample_x = (screen_x - 80) * (1 + 2048 / screen_y) / 128;
-
+                int sample_x = (screen_x - 80) * (1 + 2048 / screen_y) / 64;
                 sample_x += tick;
 
                 if (sample_x <= 0) {
