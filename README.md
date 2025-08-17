@@ -10,6 +10,11 @@ especially because I actually like karting games, so im not JUST making it for t
 
 has some fun technical challenges because GBA is Not particularly built for 3D, and also just figuring out how GBA development works in general
 
+```
+gcc -o rom.elf <C files>
+arm-none-eabi-objcopy -O binary rom.elf rom.gba
+```
+
 emulator https://mgba.io/
 
 example of such game https://github.com/Vulcalien/minicraft-gba
