@@ -4,6 +4,7 @@
 
 // https://www.problemkaputt.de/gbatek.htm#lcdiodisplaycontrol
 #define REG_DISPCNT *((volatile uint16_t *) 0x04000000)
+#define REG_KEYINPUT *((volatile uint16_t *) 0x04000130)
 
 #define VRAM_M5_BUFA ((uint16_t *) 0x06000000)
 #define VRAM_M5_BUFB ((uint16_t *) 0x0600A000)
@@ -35,19 +36,24 @@ int main(int argc, char *argv[]) {
     // set background mode to mode 5 and display BG2
     REG_DISPCNT = 5 | (1 << 10);
 
-    int tick = 0;
+    int x = 0, y = 0;
 
     while (1) {
 
-        tick++;
+        uint16_t action_x = !(REG_KEYINPUT & (1));
+        uint16_t action_z = !(REG_KEYINPUT & (1 << 1));
 
-        // uint16_t action_x = *((volatile uint16_t *) 0x04000130) & 0b0000000000000001;
-        // uint16_t action_z = *((volatile uint16_t *) 0x04000130) & 0b0000000000000010;
+        if (action_x) {
+            x++;
+        }
+        if (action_z) {
+            y++;
+        }
 
         // render to back buffer
         uint16_t *back_buffer = REG_DISPCNT & (1 << 4) ? VRAM_M5_BUFA : VRAM_M5_BUFB;
 
-        draw_mode7(back_buffer, tick, tick);
+        draw_mode7(back_buffer, x, y);
 
         // flip bit in display control register responsible for selecting which buffer is front
         REG_DISPCNT = REG_DISPCNT ^ (1 << 4);
