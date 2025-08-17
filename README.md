@@ -17,9 +17,7 @@ arm-none-eabi-objcopy -O binary rom.elf rom.gba
 
 startup project that WORKS YAY (after doing `brew install gcc-arm-none-eabi`) https://github.com/AntonioND/gba-bootstrap
 
-really scary tutorial series https://www.coranac.com/tonc/text/setup.htm
-
-GBA specs? https://www.problemkaputt.de/gbatek.htm
+GBA specs, including memory register locations https://www.problemkaputt.de/gbatek.htm
 
 emulator https://mgba.io/
 
