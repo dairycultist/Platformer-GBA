@@ -2,12 +2,20 @@
 
 #define XY(x, y) ((x) + (y) * 160)
 
+// display
 // https://www.problemkaputt.de/gbatek.htm#lcdiodisplaycontrol
 #define REG_DISPCNT *((volatile uint16_t *) 0x04000000)
-#define REG_KEYINPUT *((volatile uint16_t *) 0x04000130)
-
 #define VRAM_M5_BUFA ((uint16_t *) 0x06000000)
 #define VRAM_M5_BUFB ((uint16_t *) 0x0600A000)
+
+// input
+#define REG_KEYINPUT *((volatile uint16_t *) 0x04000130)
+#define BUTTON_A     !(REG_KEYINPUT & (1))
+#define BUTTON_B     !(REG_KEYINPUT & (1 << 1))
+#define BUTTON_RIGHT !(REG_KEYINPUT & (1 << 4))
+#define BUTTON_LEFT  !(REG_KEYINPUT & (1 << 5))
+#define BUTTON_UP    !(REG_KEYINPUT & (1 << 6))
+#define BUTTON_DOWN  !(REG_KEYINPUT & (1 << 7))
 
 // // JS code to precompute
 // let array = '';
@@ -54,24 +62,25 @@ int main(int argc, char *argv[]) {
     REG_DISPCNT = 5 | (1 << 10);
 
     uint8_t a = 0;
-    int y = 0;
+    float x = 0, y = 0;
 
     while (1) {
 
-        uint16_t action_x = !(REG_KEYINPUT & (1));
-        uint16_t action_z = !(REG_KEYINPUT & (1 << 1));
-
-        if (action_x) {
+        if (BUTTON_LEFT) {
+            a++;
+        } else if (BUTTON_RIGHT) {
             a--;
         }
-        if (action_z) {
-            y++;
+
+        if (BUTTON_UP) {
+            y += COS(a) / 32.;
+            x -= SIN(a) / 32.;
         }
 
         // render to back buffer
         uint16_t *back_buffer = REG_DISPCNT & (1 << 4) ? VRAM_M5_BUFA : VRAM_M5_BUFB;
 
-        draw_mode7(back_buffer, y, y, a);
+        draw_mode7(back_buffer, (int) x, (int) y, a);
 
         // flip bit in display control register responsible for selecting which buffer is front
         REG_DISPCNT = REG_DISPCNT ^ (1 << 4);
