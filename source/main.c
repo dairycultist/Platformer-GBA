@@ -24,7 +24,9 @@ static inline uint16_t RGB15(uint16_t r, uint16_t g, uint16_t b) {
     return (r & 0x1F) | ((g & 0x1F) << 5) | ((b & 0x1F) << 10);
 }
 
-static inline void draw_mode7(uint16_t *const buffer, int x, int y, int a) {
+static inline void draw_mode7(uint16_t *const buffer, int x, int y, uint8_t a) {
+
+    // this needs some heavy optimizations and I do NOT wanna use ASM
 
     for (int screen_y = 16; screen_y < 128; screen_y++) {
 
@@ -51,7 +53,8 @@ int main(int argc, char *argv[]) {
     // set background mode to mode 5 and display BG2
     REG_DISPCNT = 5 | (1 << 10);
 
-    int x = 0, y = 0;
+    uint8_t a = 0;
+    int y = 0;
 
     while (1) {
 
@@ -59,7 +62,7 @@ int main(int argc, char *argv[]) {
         uint16_t action_z = !(REG_KEYINPUT & (1 << 1));
 
         if (action_x) {
-            x++;
+            a--;
         }
         if (action_z) {
             y++;
@@ -68,7 +71,7 @@ int main(int argc, char *argv[]) {
         // render to back buffer
         uint16_t *back_buffer = REG_DISPCNT & (1 << 4) ? VRAM_M5_BUFA : VRAM_M5_BUFB;
 
-        draw_mode7(back_buffer, y, y, -x);
+        draw_mode7(back_buffer, y, y, a);
 
         // flip bit in display control register responsible for selecting which buffer is front
         REG_DISPCNT = REG_DISPCNT ^ (1 << 4);
