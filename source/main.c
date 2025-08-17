@@ -2,6 +2,7 @@
 
 #define XY(x, y) ((x) + (y) * 160)
 
+// https://www.problemkaputt.de/gbatek.htm#lcdiodisplaycontrol
 #define REG_DISPCNT *((volatile uint16_t *) 0x04000000)
 
 #define VRAM_M5_BUFA ((uint16_t *) 0x06000000)
@@ -12,13 +13,7 @@ static inline uint16_t RGB15(uint16_t r, uint16_t g, uint16_t b) {
     return (r & 0x1F) | ((g & 0x1F) << 5) | ((b & 0x1F) << 10);
 }
 
-static uint8_t multiplication_by_sixteenths[16][256] = {
-    0
-};
-
 int main(int argc, char *argv[]) {
-
-    // https://www.problemkaputt.de/gbatek.htm#lcdiodisplaycontrol
     
     // set background mode to mode 5 and display BG2
     REG_DISPCNT = 5 | (1 << 10);
@@ -41,7 +36,7 @@ int main(int argc, char *argv[]) {
 
             for (int screen_x = 0; screen_x < 160; screen_x++) {
 
-                int sample_x = multiplication_by_sixteenths[screen_y / 8][screen_x];
+                int sample_x = screen_x * screen_y / 128;
 
                 back_buffer[XY(screen_x, screen_y)] = RGB15(sample_x % 32, sample_y % 32, 0);
             }
