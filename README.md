@@ -23,4 +23,6 @@ emulator https://mgba.io/
 
 example of such game https://github.com/Vulcalien/minicraft-gba
 
+render modes (aka background modes) 0-5 https://www.patater.com/gbaguy/gba/ch5.htm
+
 There are libraries like `libgba` and `libtonc` for developing for GBA, neither of which I will be using.
