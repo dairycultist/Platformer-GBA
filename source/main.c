@@ -4,8 +4,7 @@
 
 #define REG_DISPCNT             *((volatile uint16_t *) 0x04000000)
 
-#define DISPCNT_BG_MODE_MASK    (0x7)
-#define DISPCNT_BG_MODE(n)      ((n) & DISPCNT_BG_MODE_MASK) // 0 to 5
+#define DISPCNT_BG_MODE(n)      ((n) & 0x7) // 0 to 5
 
 #define DISPCNT_BG2_ENABLE      (1 << 10)
 
@@ -20,11 +19,15 @@ int main(int argc, char *argv[]) {
     
     REG_DISPCNT = DISPCNT_BG_MODE(3) | DISPCNT_BG2_ENABLE;
 
-    MEM_VRAM_MODE3_FB[XY(120, 80)] = RGB15(31, 0, 0);
-    MEM_VRAM_MODE3_FB[XY(136, 80)] = RGB15(0, 31, 0);
-    MEM_VRAM_MODE3_FB[XY(120, 96)] = RGB15(0, 0, 31);
+    while (1) {
 
-    while(1);
+        // recognizes x keypress
+        uint16_t keyinput = *((volatile uint16_t *) 0x04000130) & 0b0000000000000001;
+
+        MEM_VRAM_MODE3_FB[XY(120 + keyinput, 80)] = RGB15(31, 0, 0);
+        MEM_VRAM_MODE3_FB[XY(136 + keyinput, 80)] = RGB15(0, 31, 0);
+        MEM_VRAM_MODE3_FB[XY(120 + keyinput, 96)] = RGB15(0, 0, 31);
+    }
 
     return 0;
 }

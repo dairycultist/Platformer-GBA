@@ -15,7 +15,7 @@ arm-none-eabi-gcc -o rom.elf <C files>
 arm-none-eabi-objcopy -O binary rom.elf rom.gba
 ```
 
-startup project that WORKS YAY (after doing `brew install gcc-arm-none-eabi`) https://github.com/AntonioND/gba-bootstrap
+startup project that WORKS YAY (after doing `brew install gcc-arm-none-eabi`) im working on cutting out all the parts that I dont want cuz liteweight https://github.com/AntonioND/gba-bootstrap
 
 GBA specs, including memory register locations https://www.problemkaputt.de/gbatek.htm
 
