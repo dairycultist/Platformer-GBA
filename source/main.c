@@ -17,28 +17,31 @@ int main(int argc, char *argv[]) {
     // https://www.problemkaputt.de/gbatek.htm#lcdiodisplaycontrol
     
     // set background mode to mode 5 and display BG2
-    REG_DISPCNT = (5 & 0x7) | (1 << 10);
+    REG_DISPCNT = 5 | (1 << 10);
 
-    int i = 0;
+    int tick = 0;
 
     while (1) {
 
-        if (i > 0) {
-            i--;
-            continue;
-        }
+        tick++;
 
-        i = 100000;
-
-        // recognizes x keypress
-        uint16_t keyinput = *((volatile uint16_t *) 0x04000130) & 0b0000000000000001;
+        // uint16_t action_x = *((volatile uint16_t *) 0x04000130) & 0b0000000000000001;
+        // uint16_t action_z = *((volatile uint16_t *) 0x04000130) & 0b0000000000000010;
 
         // render to back buffer
         uint16_t *back_buffer = REG_DISPCNT & (1 << 4) ? VRAM_M5_BUFA : VRAM_M5_BUFB;
 
-        back_buffer[XY(120 + keyinput, 80)] = RGB15(31, 0, 0);
-        back_buffer[XY(136 + keyinput, 80)] = RGB15(0, 31, 0);
-        back_buffer[XY(120 + keyinput, 64)] = RGB15(0, 0, 31);
+        for (int y=0; y<128; y++) {
+
+            int sample_y = (y >> 2) + tick;
+
+            for (int x=0; x<160; x++) {
+
+                int sample_x = x / 4;
+
+                back_buffer[XY(x, y)] = RGB15(sample_x % 32, sample_y % 32, 0);
+            }
+        }
 
         // flip bit in display control register responsible for selecting which buffer is front
         REG_DISPCNT = REG_DISPCNT ^ (1 << 4);
