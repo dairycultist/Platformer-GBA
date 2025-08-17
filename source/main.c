@@ -22,7 +22,7 @@ static inline void draw_mode7(uint16_t *const buffer, int x, int y) {
 
         for (int screen_x = 0; screen_x < 160; screen_x++) {
 
-            int sample_x = (screen_x - 80) * (1 + 2048 / screen_y) / 64 + x;
+            int sample_x = (screen_x - 80) * (1 + 8192 / screen_y) / 256 + x;
 
             if (sample_x >= 0 && sample_y >= 0) {
                 buffer[XY(screen_x, screen_y)] = RGB15(((sample_x / 16 % 2) ^ (sample_y / 16 % 2)) * 31, 0, 0);
