@@ -13,6 +13,23 @@ static inline uint16_t RGB15(uint16_t r, uint16_t g, uint16_t b) {
     return (r & 0x1F) | ((g & 0x1F) << 5) | ((b & 0x1F) << 10);
 }
 
+static inline void draw_mode7(uint16_t *const buffer, int x, int y) {
+
+    for (int screen_y = 16; screen_y < 128; screen_y++) {
+
+        int sample_y = 4096 / screen_y + y;
+
+        for (int screen_x = 0; screen_x < 160; screen_x++) {
+
+            int sample_x = (screen_x - 80) * (1 + 2048 / screen_y) / 64 + x;
+
+            if (sample_x >= 0 && sample_y >= 0) {
+                buffer[XY(screen_x, screen_y)] = RGB15(((sample_x / 16 % 2) ^ (sample_y / 16 % 2)) * 31, 0, 0);
+            }
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
     
     // set background mode to mode 5 and display BG2
@@ -30,23 +47,7 @@ int main(int argc, char *argv[]) {
         // render to back buffer
         uint16_t *back_buffer = REG_DISPCNT & (1 << 4) ? VRAM_M5_BUFA : VRAM_M5_BUFB;
 
-        for (int screen_y = 16; screen_y < 128; screen_y++) {
-
-            int sample_y = 4096 / screen_y;
-            sample_y += tick;
-
-            for (int screen_x = 0; screen_x < 160; screen_x++) {
-
-                int sample_x = (screen_x - 80) * (1 + 2048 / screen_y) / 64;
-                sample_x += tick;
-
-                if (sample_x <= 0) {
-                    sample_x = -sample_x;
-                }
-
-                back_buffer[XY(screen_x, screen_y)] = RGB15(((sample_x / 16 % 2) ^ (sample_y / 16 % 2)) * 31, 0, 0);
-            }
-        }
+        draw_mode7(back_buffer, tick, tick);
 
         // flip bit in display control register responsible for selecting which buffer is front
         REG_DISPCNT = REG_DISPCNT ^ (1 << 4);
