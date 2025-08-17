@@ -30,21 +30,21 @@ int main(int argc, char *argv[]) {
         // render to back buffer
         uint16_t *back_buffer = REG_DISPCNT & (1 << 4) ? VRAM_M5_BUFA : VRAM_M5_BUFB;
 
-        for (int screen_y = 8; screen_y < 128; screen_y++) {
+        for (int screen_y = 16; screen_y < 128; screen_y++) {
 
-            int sample_y = screen_y;
+            int sample_y = 2048 / screen_y;
 
             for (int screen_x = 0; screen_x < 160; screen_x++) {
 
-                int sample_x = (screen_x - 80) * (1 + 2048 / screen_y) / 512;
+                int sample_x = (screen_x - 80) * (1 + 2048 / screen_y) / 128;
 
                 sample_x += tick;
 
-                if (screen_x <= 80) {
-                    sample_x++;
+                if (sample_x <= 0) {
+                    sample_x = -sample_x;
                 }
 
-                back_buffer[XY(screen_x, screen_y)] = RGB15((sample_x * 105) % 32, sample_y % 32, 0);
+                back_buffer[XY(screen_x, screen_y)] = RGB15(((sample_x / 16 % 2) ^ (sample_y / 16 % 2)) * 31, 0, 0);
             }
         }
 
