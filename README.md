@@ -15,10 +15,10 @@ arm-none-eabi-gcc -o rom.elf <C files>
 arm-none-eabi-objcopy -O binary rom.elf rom.gba
 ```
 
+really scary tutorial series https://www.coranac.com/tonc/text/setup.htm
+
 emulator https://mgba.io/
 
 example of such game https://github.com/Vulcalien/minicraft-gba
 
 There are libraries like `libgba` and `libtonc` for developing for GBA, neither of which I will be using.
-
-https://www.reddit.com/r/GameboyAdvance/comments/1giowz0/what_3d_games_are_for_the_game_boy_advance/
