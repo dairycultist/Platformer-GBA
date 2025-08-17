@@ -1,7 +1,3 @@
-# SPDX-License-Identifier: CC0-1.0
-#
-# SPDX-FileContributor: Antonio Niño Díaz, 2022
-
 # User config
 # ===========
 
@@ -51,15 +47,13 @@ V		:= @
 SOURCEDIR	:= source
 BUILDDIR	:= build
 
-# Build artfacts
+# Build artifacts
 # --------------
 
 ELF		:= $(NAME).elf
 DUMP		:= $(NAME).dump
 ROM		:= $(NAME).gba
 MAP		:= $(NAME).map
-
-GBAFIX		:= gbafix/gbafix
 
 # Source files
 # ------------
@@ -136,18 +130,13 @@ $(BUILDDIR)/%.cpp.o : $(SOURCEDIR)/%.cpp
 
 all: $(ROM)
 
-$(GBAFIX):
-	$(V)cd gbafix && make
-
 $(ELF): $(OBJS)
 	@echo "  LD      $@"
 	$(V)$(CC) -o $@ $(OBJS) $(LDFLAGS)
 
-$(ROM): $(ELF) $(GBAFIX)
+$(ROM): $(ELF)
 	@echo "  OBJCOPY $<"
 	$(V)$(OBJCOPY) -O binary $< $@
-	@echo "  GBAFIX  $@"
-	$(V)$(GBAFIX) $@ -t$(GAME_TITLE) -c$(GAME_CODE)
 
 $(DUMP): $(ELF)
 	@echo "  OBJDUMP $@"
@@ -158,7 +147,6 @@ dump: $(DUMP)
 clean:
 	@echo "  CLEAN"
 	$(V)$(RM) $(ROM) $(ELF) $(DUMP) $(MAP) $(BUILDDIR)
-	$(V)cd gbafix && make clean
 
 # Include dependency files if they exist
 # --------------------------------------
