@@ -12,9 +12,8 @@ static inline uint16_t RGB15(uint16_t r, uint16_t g, uint16_t b) {
     return (r & 0x1F) | ((g & 0x1F) << 5) | ((b & 0x1F) << 10);
 }
 
-static uint8_t xyscreen_to_xsample_offset[2][10] = {
-    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-    { 1, 2, 1, 2, 1, 2, 1, 2, 1, 2 }
+static uint8_t multiplication_by_sixteenths[16][256] = {
+    0
 };
 
 int main(int argc, char *argv[]) {
@@ -38,14 +37,13 @@ int main(int argc, char *argv[]) {
 
         for (int screen_y = 0; screen_y < 128; screen_y++) {
 
-            int sample_x = 0;
             int sample_y = screen_y + tick;
 
             for (int screen_x = 0; screen_x < 160; screen_x++) {
 
-                back_buffer[XY(screen_x, screen_y)] = RGB15(sample_x % 32, sample_y % 32, 0);
+                int sample_x = multiplication_by_sixteenths[screen_y / 8][screen_x];
 
-                sample_x += xyscreen_to_xsample_offset[screen_y / 64][screen_x / 16];
+                back_buffer[XY(screen_x, screen_y)] = RGB15(sample_x % 32, sample_y % 32, 0);
             }
         }
 
