@@ -13,9 +13,9 @@ SOURCEDIR	:= src
 BUILDDIR	:= build
 
 # build artifacts
-ELF		:= build/$(NAME).elf
-ROM		:= build/$(NAME).gba
-MAP		:= build/$(NAME).map
+ELF		:= $(BUILDDIR)/$(NAME).elf
+ROM		:= $(BUILDDIR)/$(NAME).gba
+MAP		:= $(BUILDDIR)/$(NAME).map
 
 # source files
 SOURCES_S	:= $(wildcard $(SOURCEDIR)/*.s $(SOURCEDIR)/**/*.s)
@@ -44,8 +44,6 @@ OBJS		:= \
 	$(patsubst $(SOURCEDIR)/%.s,$(BUILDDIR)/%.s.o,$(SOURCES_S)) \
 	$(patsubst $(SOURCEDIR)/%.c,$(BUILDDIR)/%.c.o,$(SOURCES_C))
 
-DEPS		:= $(OBJS:.o=.d)
-
 # rules
 $(BUILDDIR)/%.s.o : $(SOURCEDIR)/%.s
 	@echo "  AS      $<"
@@ -56,7 +54,6 @@ $(BUILDDIR)/%.c.o : $(SOURCEDIR)/%.c
 	@echo "  CC      $<"
 	@$(MKDIR) -p $(@D) # Build target's directory if it doesn't exist
 	@$(CC) $(CFLAGS) -MMD -MP -c -o $@ $<
-
 
 # targets
 .PHONY: all clean
