@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 
     file = fopen(argv[1], "w");
 
-    fprintf(file, "int x = 10;");
+    fprintf(file, "int x = 3;");
 
     fclose(file);
 

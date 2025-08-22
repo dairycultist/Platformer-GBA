@@ -33,21 +33,6 @@ LDFLAGS		:= -mthumb -mthumb-interwork \
 		   -specs=nano.specs -T src/gba_cart.ld \
 		   -Wl,--start-group -lc -Wl,--end-group
 
-# intermediary object files
-OBJS		:= \
-	$(patsubst src/%.s,build/%_s.o,$(SOURCES_S)) \
-	$(patsubst src/%.c,build/%_c.o,$(SOURCES_C))
-
-build/%_s.o : src/%.s $(RES)
-	@echo "  COMPILE $<"
-	@$(MKDIR) -p $(@D)
-	@$(CC) $(ASFLAGS) -MMD -MP -c -o $@ $<
-
-build/%_c.o : src/%.c $(RES)
-	@echo "  COMPILE $<"
-	@$(MKDIR) -p $(@D)
-	@$(CC) $(CFLAGS) -MMD -MP -c -o $@ $<
-
 # targets (ROM relies on ELF relies on OBJS relies on RES)
 .PHONY: all clean
 
@@ -58,6 +43,20 @@ $(RES): $(wildcard res/*)
 	@gcc -o res/bmp_to_rom res/bmp_to_rom.c
 	@./res/bmp_to_rom $(RES)
 	@rm res/bmp_to_rom
+
+OBJS		:= \
+	$(patsubst src/%.s,build/%_s.o,$(SOURCES_S)) \
+	$(patsubst src/%.c,build/%_c.o,$(SOURCES_C))
+
+build/%_s.o : src/%.s $(RES) # intermediary object files from assembly
+	@echo "  COMPILE $<"
+	@$(MKDIR) -p $(@D)
+	@$(CC) $(ASFLAGS) -MMD -MP -c -o $@ $<
+
+build/%_c.o : src/%.c $(RES) # intermediary object files from C code
+	@echo "  COMPILE $<"
+	@$(MKDIR) -p $(@D)
+	@$(CC) $(CFLAGS) -MMD -MP -c -o $@ $<
 
 $(ELF): $(OBJS)
 	@echo "  LINK    $@"
