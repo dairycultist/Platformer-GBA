@@ -1,8 +1,3 @@
-# ROM config
-NAME		:= first
-GAME_TITLE	:= "FIRST"
-GAME_CODE	:= "00"
-
 # tools
 CC			:= arm-none-eabi-gcc
 OBJCOPY		:= arm-none-eabi-objcopy
@@ -10,12 +5,16 @@ MKDIR		:= mkdir
 
 # directories
 SOURCEDIR	:= src
+RESOURCEDIR	:= res
 BUILDDIR	:= build
 
 # build artifacts
-ELF		:= $(BUILDDIR)/$(NAME).elf
-ROM		:= $(BUILDDIR)/$(NAME).gba
-MAP		:= $(BUILDDIR)/$(NAME).map
+NAME		:= first
+
+ELF			:= $(BUILDDIR)/$(NAME).elf
+ROM			:= $(BUILDDIR)/$(NAME).gba
+MAP			:= $(BUILDDIR)/$(NAME).map
+RES			:= $(SOURCEDIR)/res.c
 
 # source files
 SOURCES_S	:= $(wildcard $(SOURCEDIR)/*.s $(SOURCEDIR)/**/*.s)
@@ -60,7 +59,12 @@ $(BUILDDIR)/%.c.o : $(SOURCEDIR)/%.c
 
 all: $(ROM)
 
-$(ELF): $(OBJS)
+$(RES): $(wildcard $(RESOURCEDIR)/*)
+	@echo "  RES     $@"
+	@gcc -o $(RESOURCEDIR)/bmp_to_rom $(RESOURCEDIR)/bmp_to_rom.c
+	@./$(RESOURCEDIR)/bmp_to_rom
+
+$(ELF): $(OBJS) $(RES)
 	@echo "  LD      $@"
 	@$(CC) -o $@ $(OBJS) $(LDFLAGS)
 
