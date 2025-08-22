@@ -39,12 +39,12 @@ OBJS		:= \
 	$(patsubst src/%.c,build/%_c.o,$(SOURCES_C))
 
 build/%_s.o : src/%.s
-	@echo "  AS      $<"
+	@echo "  COMPILE $<"
 	@$(MKDIR) -p $(@D)
 	@$(CC) $(ASFLAGS) -MMD -MP -c -o $@ $<
 
 build/%_c.o : src/%.c
-	@echo "  CC      $<"
+	@echo "  COMPILE $<"
 	@$(MKDIR) -p $(@D)
 	@$(CC) $(CFLAGS) -MMD -MP -c -o $@ $<
 
@@ -54,17 +54,17 @@ build/%_c.o : src/%.c
 all: $(ROM)
 
 $(RES): $(wildcard res/*)
-	@echo "  RES     $@"
+	@echo "  CREATE  $@"
 	@gcc -o res/bmp_to_rom res/bmp_to_rom.c
 	@./res/bmp_to_rom $(RES)
 	@rm res/bmp_to_rom
 
 $(ELF): $(OBJS)
-	@echo "  LD      $@"
+	@echo "  LINK    $@"
 	@$(CC) -o $@ $(OBJS) $(LDFLAGS)
 
 $(ROM): $(ELF)
-	@echo "  OBJCOPY $<"
+	@echo "  CREATE  $@"
 	@$(OBJCOPY) -O binary $< $@
 
 clean:
