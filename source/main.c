@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     BG0CNT = (8 << 8);                                  // configure BG0CNT to take tile data from 0th sector, and map data from 8th sector
 
     // write a test tile to tile data
-    memset((void *) (&VRAM_TILE(0, 1)), (uint16_t) (1 | (2 << 4)), 32);
+    memset((void *) (&VRAM_TILE(0, 1)), 1 | (2 << 4), 0x20);
 
     // write a test map to map data
     VRAM_MAP(8, 0) = 1;
