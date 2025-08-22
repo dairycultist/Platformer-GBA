@@ -3,22 +3,17 @@ CC			:= arm-none-eabi-gcc
 OBJCOPY		:= arm-none-eabi-objcopy
 MKDIR		:= mkdir
 
-# directories
-SOURCEDIR	:= src
-RESOURCEDIR	:= res
-BUILDDIR	:= build
+# preprocessing
+RES			:= src/res.c
 
-# build artifacts
-NAME		:= first
+# input
+SOURCES_S	:= src/gba_crt0.s
+SOURCES_C	:= src/main.c src/syscalls.c $(RES)
 
-ELF			:= $(BUILDDIR)/$(NAME).elf
-ROM			:= $(BUILDDIR)/$(NAME).gba
-MAP			:= $(BUILDDIR)/$(NAME).map
-RES			:= $(SOURCEDIR)/res.c
-
-# source files
-SOURCES_S	:= $(wildcard $(SOURCEDIR)/*.s $(SOURCEDIR)/**/*.s)
-SOURCES_C	:= $(wildcard $(SOURCEDIR)/*.c $(SOURCEDIR)/**/*.c)
+# output
+ELF			:= build/game.elf
+ROM			:= build/game.gba
+MAP			:= build/game.map
 
 # compiler and linker flags
 DEFINES		:= -D__GBA__
@@ -35,23 +30,22 @@ CFLAGS		+= -std=gnu11 -Wall $(DEFINES) $(ARCH) \
 
 LDFLAGS		:= -mthumb -mthumb-interwork \
 		   -Wl,-Map,$(MAP) -Wl,--gc-sections \
-		   -specs=nano.specs -T $(SOURCEDIR)/sys/gba_cart.ld \
+		   -specs=nano.specs -T src/gba_cart.ld \
 		   -Wl,--start-group -lc -Wl,--end-group
 
-# intermediate build files
+# intermediary object files
 OBJS		:= \
-	$(patsubst $(SOURCEDIR)/%.s,$(BUILDDIR)/%.s.o,$(SOURCES_S)) \
-	$(patsubst $(SOURCEDIR)/%.c,$(BUILDDIR)/%.c.o,$(SOURCES_C))
+	$(patsubst src/%.s,build/%_s.o,$(SOURCES_S)) \
+	$(patsubst src/%.c,build/%_c.o,$(SOURCES_C))
 
-# rules
-$(BUILDDIR)/%.s.o : $(SOURCEDIR)/%.s
+build/%_s.o : src/%.s
 	@echo "  AS      $<"
-	@$(MKDIR) -p $(@D) # Build target's directory if it doesn't exist
+	@$(MKDIR) -p $(@D)
 	@$(CC) $(ASFLAGS) -MMD -MP -c -o $@ $<
 
-$(BUILDDIR)/%.c.o : $(SOURCEDIR)/%.c
+build/%_c.o : src/%.c
 	@echo "  CC      $<"
-	@$(MKDIR) -p $(@D) # Build target's directory if it doesn't exist
+	@$(MKDIR) -p $(@D)
 	@$(CC) $(CFLAGS) -MMD -MP -c -o $@ $<
 
 # targets
@@ -59,12 +53,12 @@ $(BUILDDIR)/%.c.o : $(SOURCEDIR)/%.c
 
 all: $(ROM)
 
-$(RES): $(wildcard $(RESOURCEDIR)/*)
+$(RES): $(wildcard res/*)
 	@echo "  RES     $@"
-	@gcc -o $(RESOURCEDIR)/bmp_to_rom $(RESOURCEDIR)/bmp_to_rom.c
-	@./$(RESOURCEDIR)/bmp_to_rom
+	@gcc -o res/bmp_to_rom res/bmp_to_rom.c
+	@./res/bmp_to_rom $(RES)
 
-$(ELF): $(OBJS) $(RES)
+$(ELF): $(OBJS)
 	@echo "  LD      $@"
 	@$(CC) -o $@ $(OBJS) $(LDFLAGS)
 
@@ -74,4 +68,4 @@ $(ROM): $(ELF)
 
 clean:
 	@echo "  CLEAN"
-	@rm -rf $(BUILDDIR)
+	@rm -rf build
