@@ -38,17 +38,17 @@ OBJS		:= \
 	$(patsubst src/%.s,build/%_s.o,$(SOURCES_S)) \
 	$(patsubst src/%.c,build/%_c.o,$(SOURCES_C))
 
-build/%_s.o : src/%.s
+build/%_s.o : src/%.s $(RES)
 	@echo "  COMPILE $<"
 	@$(MKDIR) -p $(@D)
 	@$(CC) $(ASFLAGS) -MMD -MP -c -o $@ $<
 
-build/%_c.o : src/%.c
+build/%_c.o : src/%.c $(RES)
 	@echo "  COMPILE $<"
 	@$(MKDIR) -p $(@D)
 	@$(CC) $(CFLAGS) -MMD -MP -c -o $@ $<
 
-# targets
+# targets (ROM relies on ELF relies on OBJS relies on RES)
 .PHONY: all clean
 
 all: $(ROM)
@@ -59,7 +59,7 @@ $(RES): $(wildcard res/*)
 	@./res/bmp_to_rom $(RES)
 	@rm res/bmp_to_rom
 
-$(ELF): $(RES) $(OBJS)
+$(ELF): $(OBJS)
 	@echo "  LINK    $@"
 	@$(CC) -o $@ $(OBJS) $(LDFLAGS)
 
