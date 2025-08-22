@@ -4,15 +4,14 @@
 #define REG16(reg)   *((volatile uint16_t *) (reg))
 
 // display
-// relevant sections:
-// - VRAM https://www.problemkaputt.de/gbatek.htm#lcdvramoverview
-// - LCD I/O BG Control
-// - DISPCNT  https://www.problemkaputt.de/gbatek.htm#lcdiodisplaycontrol
-// - Palettes https://www.problemkaputt.de/gbatek.htm#lcdcolorpalettes
-#define DISPCNT      REG16(0x04000000)
-#define BG0CNT       REG16(0x04000008)
-#define VRAM         REG16(0x06000000)
-#define PALETTE      REG16(0x05000000)
+#define DISPCNT            REG16(0x04000000) // https://www.problemkaputt.de/gbatek.htm#lcdiodisplaycontrol
+#define BG0CNT             REG16(0x04000008) // https://www.problemkaputt.de/gbatek.htm#lcdiobgcontrol
+#define BG1CNT             REG16(0x0400000A)
+#define BG2CNT             REG16(0x0400000C)
+#define BG3CNT             REG16(0x0400000E)
+#define PALETTE            REG16(0x05000000) // https://www.problemkaputt.de/gbatek.htm#lcdcolorpalettes
+#define VRAM               REG16(0x06000000) // https://www.problemkaputt.de/gbatek.htm#lcdvramoverview
+#define VRAM_MAP(sector)   REG16(0x06000000 + 0x800 * sector)
 
 // input
 #define KEYINPUT     REG16(0x04000130)
@@ -37,10 +36,10 @@ int main(int argc, char *argv[]) {
     BG0CNT = (8 << 8);                                  // configure BG0CNT to take tile data from 0th sector, and map data from 8th sector
 
     // write a test sprite to tile data
-    memset((void *) &VRAM, (uint16_t) (1 | (1 << 4)), 16);
+    memset((void *) (&VRAM + 16), (uint16_t) (1 | (1 << 4)), 32);
 
     // write a test map to map data
-    *(&VRAM + (0x400 * 8)) = 1;
+    VRAM_MAP(8) = 1;
 
     while (1);
 
