@@ -57,6 +57,7 @@ $(RES): $(wildcard res/*)
 	@echo "  RES     $@"
 	@gcc -o res/bmp_to_rom res/bmp_to_rom.c
 	@./res/bmp_to_rom $(RES)
+	@rm res/bmp_to_rom
 
 $(ELF): $(OBJS)
 	@echo "  LD      $@"
@@ -69,3 +70,4 @@ $(ROM): $(ELF)
 clean:
 	@echo "  CLEAN"
 	@rm -rf build
+	@rm $(RES)
