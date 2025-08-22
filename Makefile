@@ -9,13 +9,13 @@ OBJCOPY		:= arm-none-eabi-objcopy
 MKDIR		:= mkdir
 
 # directories
-SOURCEDIR	:= source
+SOURCEDIR	:= src
 BUILDDIR	:= build
 
 # build artifacts
-ELF		:= $(NAME).elf
-ROM		:= $(NAME).gba
-MAP		:= $(NAME).map
+ELF		:= build/$(NAME).elf
+ROM		:= build/$(NAME).gba
+MAP		:= build/$(NAME).map
 
 # source files
 SOURCES_S	:= $(wildcard $(SOURCEDIR)/*.s $(SOURCEDIR)/**/*.s)
@@ -36,18 +36,17 @@ CFLAGS		+= -std=gnu11 -Wall $(DEFINES) $(ARCH) \
 
 LDFLAGS		:= -mthumb -mthumb-interwork \
 		   -Wl,-Map,$(MAP) -Wl,--gc-sections \
-		   -specs=nano.specs -T source/sys/gba_cart.ld \
+		   -specs=nano.specs -T $(SOURCEDIR)/sys/gba_cart.ld \
 		   -Wl,--start-group -lc -Wl,--end-group
 
-# tntermediate build files
+# intermediate build files
 OBJS		:= \
 	$(patsubst $(SOURCEDIR)/%.s,$(BUILDDIR)/%.s.o,$(SOURCES_S)) \
-	$(patsubst $(SOURCEDIR)/%.c,$(BUILDDIR)/%.c.o,$(SOURCES_C)) \
-	$(patsubst $(SOURCEDIR)/%.cpp,$(BUILDDIR)/%.cpp.o,$(SOURCES_CPP))
+	$(patsubst $(SOURCEDIR)/%.c,$(BUILDDIR)/%.c.o,$(SOURCES_C))
 
 DEPS		:= $(OBJS:.o=.d)
 
-# tules
+# rules
 $(BUILDDIR)/%.s.o : $(SOURCEDIR)/%.s
 	@echo "  AS      $<"
 	@$(MKDIR) -p $(@D) # Build target's directory if it doesn't exist
@@ -74,4 +73,4 @@ $(ROM): $(ELF)
 
 clean:
 	@echo "  CLEAN"
-	@rm -rf $(ROM) $(ELF) $(MAP) $(BUILDDIR)
+	@rm -rf $(BUILDDIR)
