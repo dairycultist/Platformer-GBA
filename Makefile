@@ -8,7 +8,7 @@ RES			:= src/res.c
 
 # input
 SOURCES_S	:= src/gba_crt0.s
-SOURCES_C	:= src/main.c src/syscalls.c $(RES)
+SOURCES_C	:= src/main.c src/syscalls.c
 
 # output
 ELF			:= build/game.elf
@@ -59,7 +59,7 @@ $(RES): $(wildcard res/*)
 	@./res/bmp_to_rom $(RES)
 	@rm res/bmp_to_rom
 
-$(ELF): $(OBJS)
+$(ELF): $(RES) $(OBJS)
 	@echo "  LINK    $@"
 	@$(CC) -o $@ $(OBJS) $(LDFLAGS)
 

@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <string.h>
+#include "res.c"
 
 #define REG16(reg)   *((volatile uint16_t *) (reg))
 
@@ -41,7 +42,7 @@ int main(int argc, char *argv[]) {
 
     // write a test map to map data
     VRAM_MAP(8, 0) = 1;
-    VRAM_MAP(8, 1) = 1;
+    VRAM_MAP(8, x) = 1;
 
     // TODO use input to scroll the background
 
