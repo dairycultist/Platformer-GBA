@@ -4,13 +4,13 @@
 #define REG16(reg)   *((volatile uint16_t *) (reg))
 
 // display
-#define DISPCNT            REG16(0x04000000) // https://www.problemkaputt.de/gbatek.htm#lcdiodisplaycontrol
-#define BG0CNT             REG16(0x04000008) // https://www.problemkaputt.de/gbatek.htm#lcdiobgcontrol
+#define DISPCNT            REG16(0x04000000)                   // https://www.problemkaputt.de/gbatek.htm#lcdiodisplaycontrol
+#define BG0CNT             REG16(0x04000008)                   // https://www.problemkaputt.de/gbatek.htm#lcdiobgcontrol
 #define BG1CNT             REG16(0x0400000A)
 #define BG2CNT             REG16(0x0400000C)
 #define BG3CNT             REG16(0x0400000E)
-#define PALETTE            REG16(0x05000000) // https://www.problemkaputt.de/gbatek.htm#lcdcolorpalettes
-#define VRAM               REG16(0x06000000) // https://www.problemkaputt.de/gbatek.htm#lcdvramoverview
+#define PALETTE(index)     REG16(0x05000000 + 2 * index)       // https://www.problemkaputt.de/gbatek.htm#lcdcolorpalettes
+#define VRAM_TILE(sector)  REG16(0x06000000 + 0x4000 * sector) // https://www.problemkaputt.de/gbatek.htm#lcdvramoverview
 #define VRAM_MAP(sector)   REG16(0x06000000 + 0x800 * sector)
 
 // input
@@ -30,13 +30,14 @@ static inline uint16_t RGB15(uint16_t r, uint16_t g, uint16_t b) {
 int main(int argc, char *argv[]) {
 
     // initialize rendering
-    memset((void *) &PALETTE, RGB15(31, 31, 31), 256);  // (temp) set palette to all white
-    PALETTE = RGB15(31, 10, 31);                        // set backdrop color to purple for testing
+    PALETTE(0) = RGB15(0, 0, 0);                        // initialize basic palette
+    PALETTE(1) = RGB15(31, 31, 31);
+    PALETTE(2) = RGB15(31, 10, 31);
     DISPCNT = 0 | (0b0001 << 8);                        // set background mode to mode 0 and display BG 0 (not 123 for now)
     BG0CNT = (8 << 8);                                  // configure BG0CNT to take tile data from 0th sector, and map data from 8th sector
 
     // write a test sprite to tile data
-    memset((void *) (&VRAM + 16), (uint16_t) (1 | (1 << 4)), 32);
+    memset((void *) (&VRAM_TILE(0) + 16), (uint16_t) (1 | (2 << 4)), 32);
 
     // write a test map to map data
     VRAM_MAP(8) = 1;
