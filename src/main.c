@@ -37,12 +37,12 @@ int main(int argc, char *argv[]) {
     DISPCNT = 0 | (0b0001 << 8);                        // set background mode to mode 0 and display BG 0 (not 123 for now)
     BG0CNT = (8 << 8);                                  // configure BG0CNT to take tile data from 0th sector, and map data from 8th sector
 
-    // write a test tile to tile data (TODO use memcpy once you get real tile data!)
-    memset((void *) (&VRAM_TILE(0, 1)), 1 | (2 << 4), 0x20);
+    // write a test tile to tile data
+    memcpy((void *) (&VRAM_TILE(0, 1)), test_tile, 0x20);
 
     // write a test map to map data
     VRAM_MAP(8, 0) = 1;
-    VRAM_MAP(8, x) = 1;
+    VRAM_MAP(8, 1) = 1;
 
     // TODO use input to scroll the background
 

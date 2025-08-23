@@ -42,7 +42,7 @@ $(RES): $(wildcard res/*)
 	@echo "  CREATE  $@"
 	@gcc -o res/bmp_to_rom res/bmp_to_rom.c
 	@./res/bmp_to_rom $(RES)
-	@rm res/bmp_to_rom
+	@rm -f res/bmp_to_rom
 
 OBJS		:= \
 	$(patsubst src/%.s,build/%_s.o,$(SOURCES_S)) \
@@ -69,4 +69,5 @@ $(ROM): $(ELF)
 clean:
 	@echo "  CLEAN"
 	@rm -rf build
-	@rm $(RES)
+	@rm -f $(RES)
+	@rm -f res/bmp_to_rom # just in case the RES target fails to delete it
