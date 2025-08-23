@@ -10,18 +10,20 @@
 #define BG1CNT                   REG16(0x0400000A)
 #define BG2CNT                   REG16(0x0400000C)
 #define BG3CNT                   REG16(0x0400000E)
+#define BG0HOFS                  REG16(0x04000010)                                  // https://www.problemkaputt.de/gbatek.htm#lcdiobgscrolling
+#define BG0VOFS                  REG16(0x04000012)
 #define PALETTE(index)           REG16(0x05000000 + 0x2 * index)                    // https://www.problemkaputt.de/gbatek.htm#lcdcolorpalettes
 #define VRAM_TILE(sector, index) REG16(0x06000000 + 0x4000 * sector + 0x20 * index) // https://www.problemkaputt.de/gbatek.htm#lcdvramoverview
 #define VRAM_MAP(sector, index)  REG16(0x06000000 + 0x800 * sector + 0x2 * index)
 
 // input
 #define KEYINPUT     REG16(0x04000130)
-#define BUTTON_A     !(REG_KEYINPUT & (1))
-#define BUTTON_B     !(REG_KEYINPUT & (1 << 1))
-#define BUTTON_RIGHT !(REG_KEYINPUT & (1 << 4))
-#define BUTTON_LEFT  !(REG_KEYINPUT & (1 << 5))
-#define BUTTON_UP    !(REG_KEYINPUT & (1 << 6))
-#define BUTTON_DOWN  !(REG_KEYINPUT & (1 << 7))
+#define BUTTON_A     !(KEYINPUT & (1))
+#define BUTTON_B     !(KEYINPUT & (1 << 1))
+#define BUTTON_RIGHT !(KEYINPUT & (1 << 4))
+#define BUTTON_LEFT  !(KEYINPUT & (1 << 5))
+#define BUTTON_UP    !(KEYINPUT & (1 << 6))
+#define BUTTON_DOWN  !(KEYINPUT & (1 << 7))
 
 static inline uint16_t RGB15(uint16_t r, uint16_t g, uint16_t b) {
 
@@ -44,11 +46,13 @@ int main(int argc, char *argv[]) {
     VRAM_MAP(8, 0) = 1;
     VRAM_MAP(8, 1) = 1;
 
-    // TODO use input to scroll the background
+    BG0VOFS = 3;
 
     // TODO render an object
 
-    while (1);
+    while (1) {
+        // TODO use input to scroll the background
+    }
 
     return 0;
 }

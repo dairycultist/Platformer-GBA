@@ -18,7 +18,7 @@ void process_bmp(FILE *out, char *path, char *c_varname) {
 
     // printf("%s\n", buffer);
 
-    fprintf(out, "unsigned char %s[] = { 49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49 };", c_varname);
+    fprintf(out, "unsigned char %s[] = { 33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33, };", c_varname);
 
     fclose(in);
 }
