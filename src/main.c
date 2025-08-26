@@ -59,18 +59,22 @@ int main(int argc, char *argv[]) {
     VRAM_MAP(8, 1) = 1;
 
     // stuff
-    ufixed16 x = 0;
+    ufixed16 x = 0, y = 0;
 
     while (1) {
-        // TODO use input to scroll the background
+
+        // use input to scroll the background
         if (BUTTON_RIGHT) {
-            BG0VOFS = FIXED_TO_INT(x);
-            x += 1;
+            BG0HOFS = FIXED_TO_INT(++x);
         }
 
         // wait on VBlank interrupt
-        IF = 1;
-        while (IF);
+        // done multiple times to limit processing speed
+        // (since VBlank interrupts occur four billion times a second...)
+        for (int i=0; i<160; i++) {
+            IF = 1;
+            while (IF);
+        }
     }
 
     return 0;

@@ -6,10 +6,10 @@
 //     no sign
 typedef uint16_t ufixed16;
 
-#define FIXED_TO_INT(fixed) ((fixed) >> 7)
-#define INT_TO_FIXED(int)   ((int) << 7)
+#define FIXED_TO_INT(fixed) ((uint16_t) ((fixed) >> 7))
+#define INT_TO_FIXED(int)   ((ufixed16) ((int) << 7))
 
-#define FIXED_MULT(a, b)    ((uint16_t) ((((uint32_t) (a)) * ((uint32_t) (b))) >> 14))
+#define FIXED_MULT(a, b)    ((ufixed16) ((((uint32_t) (a)) * ((uint32_t) (b))) >> 14))
 
 // addition/subtraction is the same
 // division?
