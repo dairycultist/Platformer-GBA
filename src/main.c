@@ -25,19 +25,30 @@
 #define BUTTON_UP    !(KEYINPUT & (1 << 6))
 #define BUTTON_DOWN  !(KEYINPUT & (1 << 7))
 
+// interrupts https://www.problemkaputt.de/gbatek.htm#gbainterruptcontrol
+#define IME REG16(0x04000208)
+#define IE  REG16(0x04000200)
+#define IF  REG16(0x04000202)
+
 static inline uint16_t RGB15(uint16_t r, uint16_t g, uint16_t b) {
 
     return (r & 0x1F) | ((g & 0x1F) << 5) | ((b & 0x1F) << 10);
 }
 
+// TODO render an object
+
 int main(int argc, char *argv[]) {
 
     // initialize rendering
-    PALETTE(0) = RGB15(0, 0, 0);                        // initialize basic palette
+    PALETTE(0) = RGB15(0, 0, 0);    // initialize basic palette
     PALETTE(1) = RGB15(31, 31, 31);
     PALETTE(2) = RGB15(31, 10, 31);
-    DISPCNT = 0 | (0b0001 << 8);                        // set background mode to mode 0 and display BG 0 (not 123 for now)
-    BG0CNT = (8 << 8);                                  // configure BG0CNT to take tile data from 0th sector, and map data from 8th sector
+    DISPCNT = 0 | (0b0001 << 8);    // set background mode to mode 0 and display BG 0 (not 123 for now)
+    BG0CNT = (8 << 8);              // configure BG0CNT to take tile data from 0th sector, and map data from 8th sector
+
+    // enable VBlank interrupt
+    IME = 1;
+    IE = 1;
 
     // write a test tile to tile data
     memcpy((void *) (&VRAM_TILE(0, 1)), test_tile, 0x20);
@@ -46,12 +57,14 @@ int main(int argc, char *argv[]) {
     VRAM_MAP(8, 0) = 1;
     VRAM_MAP(8, 1) = 1;
 
-    BG0VOFS = 3;
-
-    // TODO render an object
-
     while (1) {
         // TODO use input to scroll the background
+        if (BUTTON_RIGHT)
+            BG0VOFS = 1;
+
+        // wait on VBlank interrupt
+        IF = 1;
+        while (IF);
     }
 
     return 0;
