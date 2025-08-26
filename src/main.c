@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "res.c"
+#include "ufixed16.h"
 
 #define REG16(reg)   *((volatile uint16_t *) (reg))
 
@@ -57,10 +58,15 @@ int main(int argc, char *argv[]) {
     VRAM_MAP(8, 0) = 1;
     VRAM_MAP(8, 1) = 1;
 
+    // stuff
+    ufixed16 x = 0;
+
     while (1) {
         // TODO use input to scroll the background
-        if (BUTTON_RIGHT)
-            BG0VOFS = 1;
+        if (BUTTON_RIGHT) {
+            BG0VOFS = FIXED_TO_INT(x);
+            x += 1;
+        }
 
         // wait on VBlank interrupt
         IF = 1;

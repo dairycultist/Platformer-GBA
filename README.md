@@ -10,21 +10,7 @@ emulator https://mgba.io/
 
 I can design a little [game cartridge](https://en.wikipedia.org/wiki/Game_Boy_Game_Pak)!
 
-lookup tables and fixed-point math
-
-```
-ufixed16
-
-format 000000000000(.)0000
-    range of 4096
-    16 decimal values
-    no sign
-
-addition/subtraction is the same
-multiplication: (a * b) >> 8
-division: ?
-to int: a >> 4
-```
+lookup tables
 
 referencing [this project](https://github.com/AntonioND/gba-bootstrap) that WORKS YAY (after doing `brew install gcc-arm-none-eabi`).
 
