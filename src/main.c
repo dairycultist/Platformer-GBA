@@ -64,8 +64,20 @@ int main(int argc, char *argv[]) {
     while (1) {
 
         // use input to scroll the background
+        if (BUTTON_LEFT) {
+            BG0HOFS = FIXED_TO_INT(--x);
+        }
+
         if (BUTTON_RIGHT) {
             BG0HOFS = FIXED_TO_INT(++x);
+        }
+
+        if (BUTTON_UP) {
+            BG0VOFS = FIXED_TO_INT(--y);
+        }
+
+        if (BUTTON_DOWN) {
+            BG0VOFS = FIXED_TO_INT(++y);
         }
 
         // wait on VBlank interrupt
